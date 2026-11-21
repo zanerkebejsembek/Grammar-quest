@@ -21,5 +21,5 @@ app.get('/teacher',(req,res)=>res.sendFile(path.join(__dirname,'public','teacher
 app.delete('/api/student-by-name', auth, (req, res) => {const name = String(req.body.name || '').trim();
 const matches = Object.entries(db.students).filter( ([id, student]) => student.name === name );if (matches.length !== 1) {return res.status(409).json({error: 'Оқушы табылмады немесе осы атпен бірнеше оқушы бар',
 count: matches.length }); }
-delete .students[matches[0][0]]; save(); res.json({ success: true });});
+delete db.students[matches[0][0]]; save(); res.json({ success: true });});
 app.listen(process.env.PORT||3000,()=>console.log('Grammar Quest server running'));
