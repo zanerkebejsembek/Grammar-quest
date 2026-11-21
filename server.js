@@ -18,4 +18,8 @@ app.get('/api/state',(req,res)=>{let s=db.students[req.query.id];if(!s||s.token!
 app.get('/api/results',auth,(req,res)=>res.json(Object.values(db.students).map(({id,name,score,answers,joined})=>({id,name,score,completed:answers.length,finished:answers.length===QUESTIONS.length,joined})).sort((a,b)=>b.score-a.score||b.completed-a.completed)));
 app.get('/api/qr',auth,async(req,res)=>{try{let url=`${req.protocol}://${req.get('host')}/`;res.type('png');res.send(await QR.toBuffer(url,{width:360,margin:2}))}catch(e){res.status(500).end()}});
 app.get('/teacher',(req,res)=>res.sendFile(path.join(__dirname,'public','teacher.html')));
+app.delete('/api/student-by-name', auth, (req, res) => {const name = String(req.body.name || '').trim();
+const matches = Object.entries(db.students).filter( ([id, student]) => student.name === name );if (matches.length !== 1) {return res.status(409).json({error: 'Оқушы табылмады немесе осы атпен бірнеше оқушы бар',
+count: matches.length }); }
+delete .students[matches[0][0]]; save(); res.json({ success: true });});
 app.listen(process.env.PORT||3000,()=>console.log('Grammar Quest server running'));
